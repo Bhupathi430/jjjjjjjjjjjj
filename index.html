@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexure Pvt Ltd | Company Management Portal & PDF Quotation System</title>
+  <meta name="description" content="Official White-themed Internal Management System for Nexure Pvt Ltd. Track clients, employees, and generate instant PDF quotations.">
+  <link rel="icon" type="image/png" href="/nexure-logo.png">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="light-theme">
+
+  <!-- Dynamic Time-Based Greeting Loading Overlay -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+      <img src="/nexure-logo.png" alt="Nexure Pvt Ltd" class="loading-logo">
+      <h2 class="loading-greeting" id="loadingGreeting">Welcome to Nexure Management Portal</h2>
+      <div class="loading-bar-container">
+        <div class="loading-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Main Wrapper -->
+  <div id="app" class="app-container">
+
+    <!-- Top Global System Navigation Bar -->
+    <header class="global-header">
+      <div class="header-container">
+        <div class="header-brand">
+          <img src="/nexure-logo.png" alt="Nexure Logo" class="brand-logo">
+          <div class="brand-info">
+            <span class="brand-name">NEXURE PVT LTD</span>
+            <span class="brand-subtitle">Company Management System</span>
+          </div>
+        </div>
+
+        <!-- Global View Mode Switcher: Management Portal vs Public Website -->
+        <div class="view-mode-toggle">
+          <button class="mode-btn active" id="btnShowManagement">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Management Portal</span>
+          </button>
+          <button class="mode-btn" id="btnShowWebsite">
+            <i data-lucide="globe"></i>
+            <span>Public Website</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- =================================================================== -->
+    <!-- MANAGEMENT SYSTEM PORTAL (WHITE / LIGHT NORMAL THEMED) -->
+    <!-- =================================================================== -->
+    <main id="managementPortalView" class="view-section active">
+      
+      <!-- Management Sub-Header Navigation Tabs -->
+      <nav class="mgmt-nav-bar">
+        <div class="mgmt-nav-container">
+          <button class="mgmt-tab active" data-tab="tabDashboard">
+            <i data-lucide="pie-chart"></i>
+            <span>Dashboard</span>
+          </button>
+
+          <button class="mgmt-tab" data-tab="tabClients">
+            <i data-lucide="users"></i>
+            <span>Clients</span>
+            <span class="nav-counter-badge" id="badgeTotalClients">0</span>
+          </button>
+
+          <button class="mgmt-tab" data-tab="tabEmployees">
+            <i data-lucide="briefcase"></i>
+            <span>Employees</span>
+            <span class="nav-counter-badge" id="badgeTotalEmployees">0</span>
+          </button>
+
+          <button class="mgmt-tab" data-tab="tabQuotes">
+            <i data-lucide="file-text"></i>
+            <span>Instant PDF Quotes</span>
+            <span class="nav-counter-badge" id="badgeTotalQuotes">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="mgmt-content-container">
+
+        <!-- ========================================= -->
+        <!-- TAB 1: DASHBOARD OVERVIEW -->
+        <!-- ========================================= -->
+        <section id="tabDashboard" class="tab-pane active">
+          
+          <!-- Welcome Banner -->
+          <div class="welcome-card">
+            <div class="welcome-text">
+              <h2>Nexure Company Overview</h2>
+              <p>Real-time client tracking, employee statistics, and instant quotation engine.</p>
+            </div>
+            <div class="quick-action-bar">
+              <button class="btn btn-primary btn-sm" id="dashAddClientBtn">
+                <i data-lucide="plus"></i>
+                <span>Add Client</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="dashAddEmpBtn">
+                <i data-lucide="plus"></i>
+                <span>Add Employee</span>
+              </button>
+              <button class="btn btn-emerald btn-sm" id="dashCreateQuoteBtn">
+                <i data-lucide="file-text"></i>
+                <span>Create PDF Quote</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Real-Time Metrics Counters Grid -->
+          <div class="metrics-grid">
+            
+            <!-- Metric 1: Total Clients -->
+            <div class="metric-card border-blue">
+              <div class="metric-icon bg-blue-light text-blue">
+                <i data-lucide="users"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-label">Total Clients</span>
+                <div class="metric-number" id="dashMetricClients">0</div>
+                <div class="metric-subtext">
+                  <span class="status-dot green"></span> <span id="dashActiveClients">0</span> Active • 
+                  <span class="status-dot yellow"></span> <span id="dashLeadClients">0</span> Prospects
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 2: Total Employees -->
+            <div class="metric-card border-emerald">
+              <div class="metric-icon bg-emerald-light text-emerald">
+                <i data-lucide="briefcase"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-label">Total Employees</span>
+                <div class="metric-number" id="dashMetricEmployees">0</div>
+                <div class="metric-subtext" id="dashEmpDeptSubtext">
+                  Engineering & Design Team
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 3: Active Projects -->
+            <div class="metric-card border-purple">
+              <div class="metric-icon bg-purple-light text-purple">
+                <i data-lucide="code-2"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-label">Active Projects</span>
+                <div class="metric-number" id="dashMetricProjects">6</div>
+                <div class="metric-subtext">
+                  4 In Build • 2 Reviewing
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric 4: PDF Quotations Generated -->
+            <div class="metric-card border-amber">
+              <div class="metric-icon bg-amber-light text-amber">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-label">Quotes Issued</span>
+                <div class="metric-number" id="dashMetricQuotes">0</div>
+                <div class="metric-subtext">
+                  Est. Total: <strong id="dashMetricQuoteValue">₹0</strong>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Activity & Overview Grid -->
+          <div class="dashboard-activity-grid">
+            
+            <!-- Panel: Recent Clients -->
+            <div class="dashboard-panel">
+              <div class="panel-header">
+                <h3><i data-lucide="users"></i> Client Records Overview</h3>
+                <button class="btn-text" id="dashViewAllClients">View All Clients →</button>
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Client / Organization</th>
+                        <th>Status</th>
+                        <th>Budget</th>
+                        <th>Contact</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashRecentClientsTable">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Recent Employees -->
+            <div class="dashboard-panel">
+              <div class="panel-header">
+                <h3><i data-lucide="briefcase"></i> Employee Directory Overview</h3>
+                <button class="btn-text" id="dashViewAllEmp">View All Employees →</button>
+              </div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Employee Name</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashRecentEmployeesTable">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ========================================= -->
+        <!-- TAB 2: CLIENTS MANAGEMENT DIRECTORY -->
+        <!-- ========================================= -->
+        <section id="tabClients" class="tab-pane">
+          
+          <div class="section-top-bar">
+            <div>
+              <h2 class="section-heading">Clients Directory</h2>
+              <p class="section-subheading" id="clientsSummaryText">Loading client list...</p>
+            </div>
+            
+            <div class="top-bar-actions">
+              <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="searchClientInput" placeholder="Search clients..." class="form-input">
+              </div>
+
+              <select id="filterClientStatus" class="form-select status-select">
+                <option value="ALL">All Statuses</option>
+                <option value="Active">Active Clients</option>
+                <option value="Lead">Prospects / Leads</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+
+              <button class="btn btn-primary" id="openAddClientModalBtn">
+                <i data-lucide="user-plus"></i>
+                <span>Add Client</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Clients Table Card -->
+          <div class="card card-table">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Client Name</th>
+                    <th>Company / Organization</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Budget</th>
+                    <th>Status</th>
+                    <th>Date Added</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="clientsTableBody">
+                  <!-- Dynamic Client rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ========================================= -->
+        <!-- TAB 3: EMPLOYEES MANAGEMENT DIRECTORY -->
+        <!-- ========================================= -->
+        <section id="tabEmployees" class="tab-pane">
+          
+          <div class="section-top-bar">
+            <div>
+              <h2 class="section-heading">Employee Management Directory</h2>
+              <p class="section-subheading" id="employeesSummaryText">Loading employee roster...</p>
+            </div>
+            
+            <div class="top-bar-actions">
+              <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="searchEmployeeInput" placeholder="Search employees..." class="form-input">
+              </div>
+
+              <select id="filterEmployeeDept" class="form-select status-select">
+                <option value="ALL">All Departments</option>
+                <option value="Engineering">Engineering</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Sales & Marketing">Sales & Marketing</option>
+                <option value="Management">Management</option>
+              </select>
+
+              <button class="btn btn-primary" id="openAddEmployeeModalBtn">
+                <i data-lucide="plus"></i>
+                <span>Add Employee</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Department Quick Stats Pills -->
+          <div class="dept-summary-pills" id="deptSummaryPills">
+            <!-- Dynamic Department Count Pills -->
+          </div>
+
+          <!-- Employees Table Card -->
+          <div class="card card-table">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Employee Name</th>
+                    <th>Designation / Role</th>
+                    <th>Department</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Joining Date</th>
+                    <th>Monthly Salary</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="employeesTableBody">
+                  <!-- Dynamic Employee rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ========================================= -->
+        <!-- TAB 4: INSTANT PDF QUOTATION GENERATOR -->
+        <!-- ========================================= -->
+        <section id="tabQuotes" class="tab-pane">
+          
+          <div class="quote-subnav">
+            <button class="quote-subtab active" id="subtabCreateQuote">
+              <i data-lucide="file-plus"></i>
+              <span>Create New PDF Quotation</span>
+            </button>
+            <button class="quote-subtab" id="subtabQuoteHistory">
+              <i data-lucide="clock"></i>
+              <span>Quotation History (<span id="quoteHistoryCount">0</span>)</span>
+            </button>
+          </div>
+
+          <!-- SUB-VIEW 1: CREATE NEW QUOTE FORM -->
+          <div id="quoteCreateSubView" class="quote-view-container active">
+            <div class="quote-grid-layout">
+              
+              <!-- Left Column: Quote Form Controls -->
+              <div class="quote-form-card card">
+                
+                <div class="quote-form-header">
+                  <div>
+                    <h3>Quotation Details</h3>
+                    <p class="text-muted">Fill details below to generate instant PDF document.</p>
+                  </div>
+                  
+                  <!-- Select existing client quickfill -->
+                  <div class="client-quick-select">
+                    <label class="form-label" for="selectClientForQuote">Pick Saved Client:</label>
+                    <select id="selectClientForQuote" class="form-select">
+                      <option value="">-- Choose Existing Client --</option>
+                    </select>
+                  </div>
+                </div>
+
+                <form id="quotationForm" onsubmit="return false;">
+                  
+                  <!-- Quote Metadata Row -->
+                  <div class="form-row-3">
+                    <div class="form-group">
+                      <label class="form-label" for="quoteNumber">Quote Reference #</label>
+                      <input type="text" id="quoteNumber" class="form-input" required readonly>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="quoteDate">Issue Date</label>
+                      <input type="date" id="quoteDate" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="quoteValidUntil">Valid Until</label>
+                      <input type="date" id="quoteValidUntil" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <!-- Client Info Section -->
+                  <div class="form-section-title">Client & Recipient Info</div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="quoteClientName">Client Name / Contact</label>
+                      <input type="text" id="quoteClientName" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="quoteCompanyName">Company / Enterprise</label>
+                      <input type="text" id="quoteCompanyName" class="form-input" placeholder="e.g. Apex Tech Solutions" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row-3">
+                    <div class="form-group">
+                      <label class="form-label" for="quoteClientEmail">Client Email</label>
+                      <input type="email" id="quoteClientEmail" class="form-input" placeholder="rahul@apextech.com" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="quoteClientPhone">Client Phone</label>
+                      <input type="tel" id="quoteClientPhone" class="form-input" placeholder="+91 98765 43210" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="quoteCurrency">Currency Symbol</label>
+                      <select id="quoteCurrency" class="form-select">
+                        <option value="₹">INR (₹)</option>
+                        <option value="$">USD ($)</option>
+                        <option value="€">EUR (€)</option>
+                        <option value="£">GBP (£)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Dynamic Line Items Section -->
+                  <div class="form-section-title d-flex justify-between align-center">
+                    <span>Quotation Line Items</span>
+                    <button type="button" class="btn btn-outline btn-xs" id="addLineItemBtn">
+                      <i data-lucide="plus"></i>
+                      <span>Add Item</span>
+                    </button>
+                  </div>
+
+                  <div class="table-responsive line-items-container">
+                    <table class="data-table line-items-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 45%">Service / Item Description</th>
+                          <th style="width: 15%">Qty</th>
+                          <th style="width: 20%">Rate</th>
+                          <th style="width: 15%">Amount</th>
+                          <th style="width: 5%"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="lineItemsTbody">
+                        <!-- Line item rows added dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Calculations & Notes Row -->
+                  <div class="quote-calc-wrapper">
+                    
+                    <div class="quote-notes-box">
+                      <div class="form-group">
+                        <label class="form-label" for="quoteTerms">Terms & Payment Details</label>
+                        <textarea id="quoteTerms" class="form-textarea" rows="3">1. 50% advance payment upon quote confirmation.
+2. 50% balance upon final project completion.
+3. Quote valid for 30 days from issue date.</textarea>
+                      </div>
+                    </div>
+
+                    <div class="quote-totals-box">
+                      <div class="calc-line">
+                        <span>Subtotal:</span>
+                        <strong id="calcSubtotalDisplay">₹0.00</strong>
+                      </div>
+                      
+                      <div class="calc-line form-inline">
+                        <label for="quoteTaxPercent">GST / Tax (%):</label>
+                        <input type="number" id="quoteTaxPercent" class="form-input input-sm" value="18" min="0" max="100">
+                        <span id="calcTaxDisplay">₹0.00</span>
+                      </div>
+
+                      <div class="calc-line form-inline">
+                        <label for="quoteDiscount">Discount (%):</label>
+                        <input type="number" id="quoteDiscount" class="form-input input-sm" value="0" min="0" max="100">
+                        <span id="calcDiscountDisplay">₹0.00</span>
+                      </div>
+
+                      <div class="calc-line grand-total-line">
+                        <span>Grand Total:</span>
+                        <span id="calcGrandTotalDisplay" class="grand-total-amount">₹0.00</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Action Buttons Bar -->
+                  <div class="quote-actions-bar">
+                    <button type="button" class="btn btn-emerald btn-lg" id="generatePdfBtn">
+                      <i data-lucide="download"></i>
+                      <span>Download Instant PDF</span>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary btn-lg" id="previewPdfBtn">
+                      <i data-lucide="eye"></i>
+                      <span>Live Preview</span>
+                    </button>
+
+                    <button type="button" class="btn btn-outline btn-lg" id="saveQuoteBtn">
+                      <i data-lucide="save"></i>
+                      <span>Save Quote</span>
+                    </button>
+                  </div>
+
+                </form>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SUB-VIEW 2: SAVED QUOTATION HISTORY -->
+          <div id="quoteHistorySubView" class="quote-view-container">
+            <div class="card card-table">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Quote #</th>
+                      <th>Client Name</th>
+                      <th>Company</th>
+                      <th>Issue Date</th>
+                      <th>Total Amount</th>
+                      <th class="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="quoteHistoryTbody">
+                    <!-- Dynamic Quote History -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- PUBLIC CLIENT WEBSITE (NEXURE STUDIOS LANDING PAGE) -->
+    <!-- =================================================================== -->
+    <div id="publicWebsiteView" class="view-section">
+      <!-- Embedded Public Landing Page Layout -->
+      
+      <!-- Floating Pill Navigation Bar -->
+      <div class="navbar-wrapper">
+        <header class="navbar" id="navbar">
+          <div class="nav-container">
+            <a href="#hero" class="logo">
+              <img src="/nexure-logo.png" alt="Nexure Studios" class="logo-img">
+            </a>
+
+            <nav>
+              <ul class="nav-menu" id="navMenu">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+              </ul>
+            </nav>
+
+            <div class="nav-actions">
+              <button class="btn btn-outline btn-sm" id="btnSwitchToMgmt">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Open Management Portal</span>
+              </button>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <!-- Hero Section -->
+      <section class="hero" id="hero">
+        <div class="container hero-content-center">
+          <h1 class="hero-title-center">
+            Transforming Bold Visions Into <span class="text-green">High-Impact</span> Digital Success.
+          </h1>
+          
+          <p class="hero-subtitle-center">
+            Nexure Studios crafts web applications, custom UI/UX designs, and brand systems built with an absolute commitment to your vision. Unlimited revisions, transparent progress, and guaranteed satisfaction.
+          </p>
+
+          <div class="hero-cta-group-center">
+            <button class="btn btn-primary" id="heroOpenMgmtBtn">
+              <span>Access Internal Management Portal</span>
+            </button>
+          </div>
+
+          <div class="hero-stats-center">
+            <div class="stat-item">
+              <span class="stat-num text-green">99.8%</span>
+              <span class="stat-label">Client Approval</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">10+</span>
+              <span class="stat-label">Projects Launched</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num text-green">100%</span>
+              <span class="stat-label">On-Time Guarantee</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">24/7</span>
+              <span class="stat-label">Support</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Founder & Portfolio Section -->
+      <section class="portfolio-section" id="portfolio">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag section-tag-green">FOUNDER SPOTLIGHT</span>
+            <h2 class="section-title">The Nexure Vision</h2>
+            <p class="section-desc">Building the Future for Clients & Businesses Worldwide</p>
+          </div>
+
+          <div class="founder-card-box">
+            <div class="founder-badge">Founder & Lead Engineer</div>
+            <h3 class="founder-name">Bhupathi Vardhinedi</h3>
+            <p class="founder-bio">
+              Meet <strong>Bhupathi Vardhinedi</strong>, Founder of Nexure Studios. With his great vision, Bhupathi is actively building the future of his own and his clients' business life. He is a well-experienced Web Developer who has successfully delivered high-converting E-Commerce platforms, Personal Blogs, Agency Portals, and bespoke web solutions.
+            </p>
+
+            <div class="founder-stats-pills">
+              <span class="founder-pill">✓ E-Commerce Platforms</span>
+              <span class="founder-pill">✓ Personal Blogs & Media</span>
+              <span class="founder-pill">✓ Agency & Corporate Portals</span>
+              <span class="founder-pill">✓ Custom Web Applications</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <div class="container">
+          <div class="footer-bottom">
+            <p>© 2026 Nexure Pvt Ltd / Nexure Studios. All Rights Reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- MODALS CONTAINER -->
+  <!-- =================================================================== -->
+
+  <!-- 1. ADD / EDIT CLIENT MODAL -->
+  <div class="modal-overlay" id="clientModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="clientModalTitle">Add New Client</h3>
+        <button class="modal-close" id="closeClientModalBtn">&times;</button>
+      </div>
+      <form id="clientForm">
+        <input type="hidden" id="clientId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="inputClientName">Client / Contact Name</label>
+            <input type="text" id="inputClientName" class="form-input" placeholder="e.g. Ramesh Kumar" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputClientCompany">Company Name</label>
+            <input type="text" id="inputClientCompany" class="form-input" placeholder="e.g. TechCorp Innovations" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inputClientEmail">Email Address</label>
+              <input type="email" id="inputClientEmail" class="form-input" placeholder="ramesh@techcorp.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inputClientPhone">Phone Number</label>
+              <input type="tel" id="inputClientPhone" class="form-input" placeholder="+91 98765 12345" required>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inputClientBudget">Budget (₹)</label>
+              <input type="number" id="inputClientBudget" class="form-input" placeholder="e.g. 75000" required min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inputClientStatus">Client Status</label>
+              <select id="inputClientStatus" class="form-select" required>
+                <option value="Active">Active Client</option>
+                <option value="Lead">Prospect / Lead</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancelClientModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Client</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. ADD / EDIT EMPLOYEE MODAL -->
+  <div class="modal-overlay" id="employeeModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="employeeModalTitle">Add New Employee</h3>
+        <button class="modal-close" id="closeEmployeeModalBtn">&times;</button>
+      </div>
+      <form id="employeeForm">
+        <input type="hidden" id="employeeId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="inputEmpName">Employee Name</label>
+            <input type="text" id="inputEmpName" class="form-input" placeholder="e.g. Ananya Rao" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inputEmpRole">Role / Designation</label>
+              <input type="text" id="inputEmpRole" class="form-input" placeholder="e.g. Senior Frontend Developer" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inputEmpDept">Department</label>
+              <select id="inputEmpDept" class="form-select" required>
+                <option value="Engineering">Engineering</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Sales & Marketing">Sales & Marketing</option>
+                <option value="Management">Management</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inputEmpEmail">Email Address</label>
+              <input type="email" id="inputEmpEmail" class="form-input" placeholder="ananya@nexure.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inputEmpPhone">Phone Number</label>
+              <input type="tel" id="inputEmpPhone" class="form-input" placeholder="+91 99887 66554" required>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="inputEmpSalary">Monthly Salary (₹)</label>
+              <input type="number" id="inputEmpSalary" class="form-input" placeholder="e.g. 65000" required min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inputEmpStatus">Status</label>
+              <select id="inputEmpStatus" class="form-select" required>
+                <option value="Active">Active</option>
+                <option value="On Leave">On Leave</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancelEmployeeModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Employee</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. LIVE PDF PREVIEW MODAL -->
+  <div class="modal-overlay modal-large" id="pdfPreviewModal">
+    <div class="modal-card">
+      <div class="modal-header d-flex justify-between align-center">
+        <h3>Live PDF Quotation Document</h3>
+        <div class="d-flex gap-2">
+          <button class="btn btn-emerald btn-sm" id="modalDownloadPdfBtn">
+            <i data-lucide="download"></i> Download PDF
+          </button>
+          <button class="modal-close" id="closePdfModalBtn">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body pdf-preview-body">
+        
+        <!-- HIGH-QUALITY A4 VECTOR STYLED PRINTABLE CONTAINER -->
+        <div class="pdf-document-template" id="pdfDocumentTemplate">
+          
+          <!-- Document Header -->
+          <div class="pdf-header">
+            <div class="pdf-brand-box">
+              <img src="/nexure-logo.png" alt="Nexure Pvt Ltd" class="pdf-logo">
+              <div>
+                <h1 class="pdf-company-name">NEXURE PVT LTD</h1>
+                <p class="pdf-company-sub">Digital Product Agency & Software Solutions</p>
+                <p class="pdf-company-contact">nexurestudio1@gmail.com | +91 98765 43210</p>
+              </div>
+            </div>
+
+            <div class="pdf-meta-box">
+              <div class="pdf-tag">OFFICIAL QUOTATION</div>
+              <table class="pdf-meta-table">
+                <tr>
+                  <td>Quote Ref:</td>
+                  <td><strong id="pdfRenderNumber">NEX-QT-2026-001</strong></td>
+                </tr>
+                <tr>
+                  <td>Issue Date:</td>
+                  <td id="pdfRenderDate">2026-08-16</td>
+                </tr>
+                <tr>
+                  <td>Valid Until:</td>
+                  <td id="pdfRenderValidUntil">2026-09-16</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <hr class="pdf-divider">
+
+          <!-- Bill To Information -->
+          <div class="pdf-bill-to-grid">
+            <div class="pdf-bill-to-box">
+              <span class="pdf-section-label">QUOTATION PREPARED FOR:</span>
+              <h3 class="pdf-client-name" id="pdfRenderClientName">Rahul Sharma</h3>
+              <p class="pdf-client-company" id="pdfRenderCompanyName">Apex Tech Solutions</p>
+              <p id="pdfRenderClientEmail">rahul@apextech.com</p>
+              <p id="pdfRenderClientPhone">+91 98765 43210</p>
+            </div>
+
+            <div class="pdf-prepared-by-box">
+              <span class="pdf-section-label">PREPARED BY:</span>
+              <h3>Bhupathi Vardhinedi</h3>
+              <p>Founder & Lead Engineer</p>
+              <p>Nexure Pvt Ltd</p>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <div class="pdf-table-wrapper">
+            <table class="pdf-table">
+              <thead>
+                <tr>
+                  <th style="width: 8%">#</th>
+                  <th style="width: 50%">Service / Deliverable Description</th>
+                  <th style="width: 12%" class="text-center">Qty</th>
+                  <th style="width: 15%" class="text-right">Unit Rate</th>
+                  <th style="width: 15%" class="text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody id="pdfRenderItemsTbody">
+                <!-- Rendered line items -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Calculations Breakdown -->
+          <div class="pdf-summary-grid">
+            <div class="pdf-terms-box">
+              <span class="pdf-section-label">TERMS & CONDITIONS:</span>
+              <p id="pdfRenderTerms">
+                1. 50% advance payment upon quote confirmation.<br>
+                2. 50% balance upon final project completion.<br>
+                3. Quote valid for 30 days from issue date.
+              </p>
+            </div>
+
+            <div class="pdf-totals-box">
+              <div class="pdf-total-row">
+                <span>Subtotal:</span>
+                <span id="pdfRenderSubtotal">₹0.00</span>
+              </div>
+              <div class="pdf-total-row">
+                <span>GST / Tax (<span id="pdfRenderTaxRate">18</span>%):</span>
+                <span id="pdfRenderTax">₹0.00</span>
+              </div>
+              <div class="pdf-total-row" id="pdfRenderDiscountRow">
+                <span>Discount (<span id="pdfRenderDiscountRate">0</span>%):</span>
+                <span id="pdfRenderDiscount">-₹0.00</span>
+              </div>
+              <div class="pdf-total-row pdf-grand-total">
+                <span>Grand Total:</span>
+                <strong id="pdfRenderGrandTotal">₹0.00</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Signatures & Footer -->
+          <div class="pdf-footer-signatures">
+            <div class="pdf-stamp-box">
+              <div class="pdf-stamp-circle">NEXURE PVT LTD</div>
+            </div>
+
+            <div class="pdf-signature-box">
+              <div class="pdf-signature-line"></div>
+              <p>Authorized Signature</p>
+              <p class="pdf-sig-title">Nexure Pvt Ltd</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container">
+    <div class="toast" id="toast">
+      <i data-lucide="check-circle-2"></i>
+      <span id="toastMessage">Action completed successfully!</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
