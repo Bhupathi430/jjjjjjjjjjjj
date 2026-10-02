@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>Zerus — Launching Oct 20th | Nexure Studio</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+    * {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Inter", sans-serif;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #faf5ff;
+      color: #3b0764;
+    }
+
+    /* Light Purple Glassmorphism */
+    .glass-purple-header {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(25px) saturate(190%);
+      -webkit-backdrop-filter: blur(25px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+    }
+
+    .glass-purple-button {
+      background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(243, 232, 255, 0.85) 50%, 
+        rgba(233, 213, 255, 0.92) 100%
+      );
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      color: #581c87;
+      box-shadow: 
+        0 12px 28px -6px rgba(168, 85, 247, 0.3),
+        0 2px 6px 0 rgba(255, 255, 255, 0.9) inset,
+        inset 0 -1.5px 2px 0 rgba(147, 51, 234, 0.12);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-purple-button:hover, .glass-purple-button:active {
+      transform: translateY(-2px) scale(1.02);
+      background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(233, 213, 255, 0.98) 100%
+      );
+      color: #3b0764;
+      box-shadow: 
+        0 20px 40px -8px rgba(168, 85, 247, 0.4),
+        0 4px 12px 0 rgba(255, 255, 255, 1) inset;
+    }
+
+    /* Floating Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(12deg) scale(1); }
+      50% { transform: translateY(-18px) rotate(18deg) scale(1.04); }
+    }
+    @keyframes floatMedium {
+      0%, 100% { transform: translateY(0px) rotate(-12deg) scale(1); }
+      50% { transform: translateY(-14px) rotate(-6deg) scale(1.05); }
+    }
+    .animate-float-1 { animation: floatSlow 7s ease-in-out infinite; }
+    .animate-float-2 { animation: floatMedium 5.5s ease-in-out infinite; }
+  </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
+
+  <!-- ==================== LIGHT PURPLE LIVE BACKGROUND MOTION ==================== -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+    <canvas id="liveBgCanvas" class="w-full h-full block"></canvas>
+
+    <svg 
+      id="parallaxSvg"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; transition: transform 0.7s ease-out;"
+      viewBox="0 0 1440 900" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <linearGradient id="purpleRibbonLeft" x1="0%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%" stop-color="#a855f7" stop-opacity="0.35" />
+          <stop offset="50%" stop-color="#c084fc" stop-opacity="0.2" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </linearGradient>
+
+        <linearGradient id="purpleRibbonRight" x1="100%" y1="0%" x2="40%" y2="100%">
+          <stop offset="0%" stop-color="#c084fc" stop-opacity="0.35" />
+          <stop offset="60%" stop-color="#e9d5ff" stop-opacity="0.18" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+
+      <path d="M-100,950 C100,750 200,600 450,900 C600,1050 300,500 0,250 C-100,150 -150,50 -200,-50 Z" fill="url(#purpleRibbonLeft)" />
+      <path d="M-50,900 C150,700 250,550 400,800 C480,920 180,450 -50,180 Z" stroke="rgba(255, 255, 255, 0.9)" stroke-width="3.5" fill="none" />
+
+      <path d="M1000,-50 C1150,150 1350,100 1500,300 C1550,380 1400,250 1200,50 C1100,-50 1050,-100 1000,-50 Z" fill="url(#purpleRibbonRight)" />
+      <path d="M1020,-30 C1170,170 1370,120 1520,320" stroke="rgba(255, 255, 255, 0.95)" stroke-width="4" fill="none" />
+    </svg>
+
+    <!-- Floating 3D Purple Translucent Orbs -->
+    <div id="cube1" class="absolute top-[20%] left-[6%] sm:left-[10%] w-14 h-14 sm:w-20 sm:h-20 animate-float-1 pointer-events-auto transition-transform duration-500 ease-out">
+      <div class="w-full h-full rounded-2xl bg-white/40 backdrop-blur-md border border-white/90 shadow-xl shadow-purple-500/15 transform rotate-45 flex items-center justify-center overflow-hidden cursor-pointer" onclick="openPreBookForm()">
+        <div class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white/70 blur-xs"></div>
+        <div class="w-full h-full bg-gradient-to-br from-white/80 via-purple-100/40 to-purple-300/40"></div>
+      </div>
+    </div>
+
+    <div id="cube2" class="absolute top-[68%] right-[8%] sm:right-[12%] w-16 h-16 sm:w-24 sm:h-24 animate-float-2 pointer-events-auto transition-transform duration-500 ease-out">
+      <div class="w-full h-full rounded-3xl bg-white/40 backdrop-blur-lg border border-white/90 shadow-2xl shadow-purple-500/20 transform -rotate-12 flex items-center justify-center overflow-hidden cursor-pointer" onclick="openPreBookForm()">
+        <div class="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/90 blur-xs"></div>
+        <div class="w-full h-full bg-gradient-to-br from-white/80 via-purple-100/50 to-purple-300/50"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== HEADER NAVBAR (MOBILE RESPONSIVE) ==================== -->
+  <header class="fixed top-3 sm:top-4 left-0 right-0 z-50 px-3 sm:px-8">
+    <div class="max-w-5xl mx-auto">
+      <div class="glass-purple-header rounded-full px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between border border-purple-100 shadow-lg shadow-purple-950/5">
+        
+        <a href="#" class="flex items-center gap-2 sm:gap-3 group shrink-0">
+          <img src="./zerus-logo-transparent.png" alt="Zerus" class="h-7 sm:h-9 w-auto object-contain" />
+          <div class="flex items-center gap-2 border-l border-purple-200/80 pl-2 sm:pl-3">
+            <span class="text-xs sm:text-sm font-extrabold tracking-tight flex items-center gap-1">
+              <span class="text-purple-500 text-[10px] sm:text-xs font-medium">by</span>
+              <span class="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-800 bg-clip-text text-transparent font-black">Nexure Studio</span>
+            </span>
+          </div>
+          <span class="hidden md:inline-block text-xs font-extrabold text-purple-700 bg-purple-100/80 px-2.5 py-0.5 rounded-full border border-purple-200 ml-1">
+            Launch Oct 20th
+          </span>
+        </a>
+
+        <button onclick="openPreBookForm()" class="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold bg-purple-600 hover:bg-purple-700 text-white transition-all flex items-center gap-1.5 shadow-md shrink-0 cursor-pointer">
+          <span>Pre Book Free</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ==================== MAIN HERO SECTION (MOBILE FRIENDLY) ==================== -->
+  <section class="relative min-h-[92vh] flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 z-10 overflow-hidden">
+    <div class="w-full max-w-4xl mx-auto text-center relative z-10 space-y-6 sm:space-y-8">
+      
+      <!-- Top Specular Badge - Nexure Studio, Launch Date Oct 20th & Free Pre-Booking -->
+      <div class="inline-flex items-center justify-center">
+        <div class="inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-purple-100/90 backdrop-blur-md border border-purple-200/90 shadow-xs text-purple-800 text-xs sm:text-sm font-bold tracking-tight">
+          <i data-lucide="calendar" class="w-4 h-4 text-purple-600 shrink-0"></i>
+          <span class="font-extrabold text-purple-950">Nexure Studio</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+          <span>Launch Date: Oct 20th</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+          <span class="text-purple-700 font-black">Pre Booking is Free</span>
+        </div>
+      </div>
+
+      <!-- MIDDLE ALIGNED LARGER TRANSPARENT ZERUS LOGO IMAGE -->
+      <div class="flex flex-col items-center justify-center space-y-4 pt-1 sm:pt-3">
+        
+        <div class="relative group cursor-pointer w-full" onclick="openPreBookForm()">
+          <div class="p-2 sm:p-4 w-full max-w-sm sm:max-w-xl md:max-w-2xl mx-auto group-hover:scale-105 transition-transform duration-500">
+            <img 
+              src="./zerus-logo-transparent.png" 
+              alt="Zerus Logo Text V.1.1" 
+              class="w-full h-auto object-contain max-h-64 sm:max-h-80 md:max-h-[22rem] mx-auto filter drop-shadow-xl" 
+            />
+          </div>
+          <div class="absolute -inset-6 bg-purple-400/30 rounded-full blur-3xl opacity-50 group-hover:opacity-85 transition-opacity -z-10"></div>
+        </div>
+
+        <p class="text-lg sm:text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-purple-800 via-indigo-700 to-purple-900 bg-clip-text text-transparent tracking-tight px-2">
+          Next-Generation Video Editing Suite
+        </p>
+
+      </div>
+
+      <!-- Subtitle -->
+      <p class="text-sm sm:text-base md:text-lg text-slate-600 max-w-xl mx-auto font-normal leading-relaxed px-2">
+        Create stunning videos with powerful tools, AI features, and a seamless browser-native editing experience.
+      </p>
+
+      <!-- DOWN: GLASS UI BUTTON "PRE BOOK" (TOUCH FRIENDLY TARGET) -->
+      <div class="pt-2 flex flex-col items-center justify-center space-y-3 sm:space-y-4">
+        
+        <button onclick="openPreBookForm()" class="glass-purple-button w-full sm:w-auto px-10 sm:px-14 py-4 sm:py-5 rounded-full text-lg sm:text-xl font-extrabold flex items-center justify-center shadow-2xl cursor-pointer active:scale-95 transition-all min-h-[52px]">
+          <span>Pre Book</span>
+        </button>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 pt-1 text-xs sm:text-sm">
+          <span class="text-purple-900 font-extrabold flex items-center gap-1.5 bg-purple-100/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-purple-200/90 shadow-2xs">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-600 shrink-0"></i>
+            <span>Pre Booking is Free</span>
+          </span>
+          <span class="text-purple-900 font-extrabold bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-purple-200 shadow-2xs">
+            From Oct 20th Onwards: <span class="text-purple-700 font-black">₹149 / Month</span>
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==================== GOOGLE FORM MODAL (MOBILE RESPONSIVE) ==================== -->
+  <div id="formModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-2 sm:p-6 bg-slate-950/70 backdrop-blur-xl">
+    <div class="bg-white/95 backdrop-blur-2xl rounded-2xl sm:rounded-3xl w-full max-w-4xl h-[94vh] sm:h-[90vh] shadow-2xl border border-purple-200/80 flex flex-col overflow-hidden relative">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 bg-purple-50/90 border-b border-purple-100">
+        <div class="flex items-center gap-2 sm:gap-3 truncate">
+          <img src="./zerus-logo-transparent.png" alt="Zerus" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0" />
+          <div class="truncate">
+            <h3 class="font-bold text-slate-900 text-xs sm:text-sm truncate">Zerus Free Pre-Book Form</h3>
+            <p class="text-[10px] sm:text-[11px] text-purple-600 font-semibold truncate">Launch Date: Oct 20th • ₹149/Month From Oct 20 Onwards</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeC-1cOvlSJ78x5aH5BfEy41Q4fa77frBHinFGt8AtwxwMFGg/viewform?usp=publish-editor" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="px-2.5 sm:px-3 py-1.5 rounded-full bg-white hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition-all flex items-center gap-1 shadow-2xs"
+          >
+            <span class="hidden xs:inline">Open in Tab</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+
+          <button onclick="closePreBookForm()" class="p-1.5 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-200/60 transition-all cursor-pointer">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Iframe -->
+      <div class="flex-1 w-full h-full bg-slate-50 relative overflow-hidden">
+        <iframe 
+          src="https://docs.google.com/forms/d/e/1FAIpQLSeC-1cOvlSJ78x5aH5BfEy41Q4fa77frBHinFGt8AtwxwMFGg/viewform?embedded=true"
+          class="w-full h-full border-0"
+          title="Zerus Pre-Book Google Form"
+        >
+          Loading Google Form...
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    lucide.createIcons();
+
+    function openPreBookForm() {
+      document.getElementById('formModal').classList.remove('hidden');
+    }
+
+    function closePreBookForm() {
+      document.getElementById('formModal').classList.add('hidden');
+    }
+
+    // Mouse & Touch Parallax
+    let mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      document.getElementById('parallaxSvg').style.transform = `translate3d(${mouseX * 12}px, ${mouseY * 12}px, 0)`;
+      document.getElementById('cube1').style.transform = `translate3d(${mouseX * -16}px, ${mouseY * -16}px, 0)`;
+      document.getElementById('cube2').style.transform = `translate3d(${mouseX * 20}px, ${mouseY * 20}px, 0)`;
+    });
+
+    const canvas = document.getElementById('liveBgCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const bubbles = Array.from({ length: 18 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 22 + 8,
+      speedY: Math.random() * 0.35 + 0.15,
+      speedX: (Math.random() - 0.5) * 0.3,
+      alpha: Math.random() * 0.35 + 0.15,
+      pulseOffset: Math.random() * Math.PI * 2
+    }));
+
+    let time = 0;
+    function renderCanvas() {
+      time += 0.01;
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = '#faf5ff';
+      ctx.fillRect(0, 0, width, height);
+
+      const orbX1 = width * 0.35 + Math.sin(time * 0.7) * 90;
+      const orbY1 = height * 0.3 + Math.cos(time * 0.5) * 70;
+      const grad1 = ctx.createRadialGradient(orbX1, orbY1, 0, orbX1, orbY1, width * 0.55);
+      grad1.addColorStop(0, 'rgba(233, 213, 255, 0.75)');
+      grad1.addColorStop(0.6, 'rgba(243, 232, 255, 0.35)');
+      grad1.addColorStop(1, 'rgba(250, 245, 255, 0)');
+      ctx.fillStyle = grad1;
+      ctx.fillRect(0, 0, width, height);
+
+      bubbles.forEach((b) => {
+        b.y -= b.speedY;
+        b.x += Math.sin(time + b.pulseOffset) * 0.4 + b.speedX;
+        if (b.y < -30) { b.y = height + 30; b.x = Math.random() * width; }
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${b.alpha * 0.7})`;
+        ctx.fill();
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = `rgba(192, 132, 252, ${b.alpha * 0.85})`;
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(renderCanvas);
+    }
+    renderCanvas();
+  </script>
+</body>
+</html>
